@@ -1,0 +1,12 @@
+
+Host web_01
+    HostName ip_address_of_web_01  # Replace with the actual IP address
+    User ubuntu  # Replace with your desired username
+
+Host web_02
+    HostName ip_address_of_web_02  # Replace with the actual IP address
+    User ubuntu  # Replace with your desired username
+
+Host lb_01
+    HostName ip_address_of_lb_01  # Replace with the actual IP address
+    User ubuntu  # Replace with your desired username
