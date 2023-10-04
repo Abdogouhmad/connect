@@ -34,22 +34,22 @@ check_op_web_01_and_web_02_lb_01 ()
 connect_to_web_01 ()
 {
     cprint "$GREEN" "[+]Connecting to web-01..."
-    ssh web_01 # !change this 
+    ssh web-01 # !change this 
 }
 
 connect_to_web_02 ()
 {
     cprint "$GREEN" "[+]Connecting to web-02..."
-    ssh web_02
+    ssh web-02
 }
 
 connect_to_lb_01 () {
     cprint "$GREEN" "[+]Connecting to bl-01..."
-    ssh lb_01
+    ssh lb-01
 }
 
 
-# function to transfer the files to web-01 and web-02 and lb_01
+# function to transfer the files to web-01 and web-02 and lb-01
 transfer_to_web_01 ()
 {
     cprint "$GREEN" "[+]Transferring files to web-01..."
@@ -57,7 +57,7 @@ transfer_to_web_01 ()
     read -rea files
 
     for file in "${files[@]}"; do
-        scp -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no "$file" web_01:~/ # !change this
+        scp -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no "$file" web-01:~/ # !change this
     done
 }
 
@@ -68,7 +68,7 @@ transfer_to_web_02 ()
     read -rea files
 
     for file in "${files[@]}"; do
-        scp -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no "$file" web_02:~/ # !change this
+        scp -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no "$file" web-02:~/ # !change this
     done
 }
 
@@ -79,7 +79,7 @@ transfer_to_lb_01 ()
     read -rea files
 
     for file in "${files[@]}"; do
-        scp -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no "$file" lb_01:~/ # !change this
+        scp -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no "$file" lb-01:~/ # !change this
     done
 }
 
@@ -98,10 +98,10 @@ print_msg()
     cprint "$BLUE" "[?]Choose the operation to perform: \n"
     cprint "$YELLOW" "========== connect to web-01 -> 1 ===============\n"
     cprint "$YELLOW" "========== connect to web-02 -> 2 ==========\n"
-    cprint "$YELLOW" "========== connect to lb_01 -> 3 ============\n"
+    cprint "$YELLOW" "========== connect to lb-01 -> 3 ============\n"
     cprint "$YELLOW" "========== transfer files to web-01 -> 4 ============\n"
     cprint "$YELLOW" "========== transfer files to web-02 -> 5 ============\n"
-    cprint "$YELLOW" "========== transfer files to lb_01 -> 6 ============\n"
+    cprint "$YELLOW" "========== transfer files to lb-01 -> 6 ============\n"
     cprint "$YELLOW" "==========Exit -> 7 ======================\n"
     cprint "$GREEN" "[?]Enter the number: "
 }
