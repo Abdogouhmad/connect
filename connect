@@ -1,5 +1,10 @@
 #!/usr/bin/env bash
 
+# Server addresses (change these to your actual addresses)
+server1="5.565.453.432"
+server2="35.231.53.432"
+load_balancer="34.56.789.012"
+
 # coloring
 RED="\033[1;31m"
 GREEN="\033[1;32m"
@@ -18,10 +23,10 @@ cprint() {
 }
 
 
-cprint "$GREEN" "[+] Good Morning sir what server you would like to connect: "
+cprint "$GREEN" "[+] Good Day, What server you would like to connect to?: "
 
 # check the if the op is done well
-check_op_web_01_and_web_02_bl ()
+check_op_web_01_and_web_02_lb ()
 {
   if [ $? -eq 0 ]; then
     cprint "$GREEN" "[+]Have a Nice Day\n"
@@ -34,18 +39,18 @@ check_op_web_01_and_web_02_bl ()
 connect_to_web_01 ()
 {
     cprint "$GREEN" "[+]Connecting to web-01..."
-    ssh ubuntu@54.90.63.243 # !change this 
+    ssh ubuntu@$server1
 }
 
 connect_to_web_02 ()
 {
     cprint "$GREEN" "[+]Connecting to web-02..."
-    ssh ubuntu@54.90.4.180
+    ssh ubuntu@$server2
 }
 
-connect_to_bl () {
+connect_to_lb () {
     cprint "$GREEN" "[+]Connecting to bl-01..."
-    ssh ubuntu@52.91.135.223 
+    ssh ubuntu@$load_balancer
 }
 
 
@@ -57,7 +62,7 @@ tranfare_to_web_01 ()
     read -rea files
 
     for file in "${files[@]}"; do
-        scp -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no "$file" ubuntu@54.90.63.243:~/ # !change this
+        scp -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no "$file" ubuntu@$server1:~/
     done
 }
 
@@ -68,18 +73,18 @@ tranfare_to_web_02 ()
     read -rea files
 
     for file in "${files[@]}"; do
-        scp -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no "$file" ubuntu@54.90.4.180:~/ # !change this
+        scp -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no "$file" ubuntu@$server2:~/
     done
 }
 
-tranfare_to_bl_01 ()
+tranfare_to_lb_01 ()
 {
     cprint "$GREEN" "[+]Transferring files to web-02..."
     cprint "${MAGENTA}""[?] Enter the names of the files to transfer (space-separated): "
     read -rea files
 
     for file in "${files[@]}"; do
-        scp -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no "$file" ubuntu@52.91.135.223:~/ # !change this
+        scp -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no "$file" ubuntu@$load_balancer:~/
     done
 }
 
@@ -94,7 +99,7 @@ exit_func ()
 print_msg()
 {
 
-    cprint "$MAGENTA" "---> This is a script tends to connect and transfer the data files to server <---\n"
+    cprint "$MAGENTA" "---> This is a script that automates connection and transfer of the files to your server <---\n"
     cprint "$BLUE" "[?]Choose the operation to perform: \n"
     cprint "$YELLOW" "========== connect to web-01 -> 1 ===============\n"
     cprint "$YELLOW" "========== connect to web-02 -> 2 ==========\n"
@@ -107,10 +112,6 @@ print_msg()
 }
 
 
-
-
-
-
 loop=true
 
 while $loop ; do
@@ -121,27 +122,27 @@ echo
 case $input in
   1)
     connect_to_web_01
-    check_op_web_01_and_web_02_bl
+    check_op_web_01_and_web_02_lb
     ;;
   2)
     connect_to_web_02
-    check_op_web_01_and_web_02_bl
+    check_op_web_01_and_web_02_lb
     ;;
   3)
     connect_to_bl
-    check_op_web_01_and_web_02_bl
+    check_op_web_01_and_web_02_lb
     ;;
   4)
     tranfare_to_web_01
-    check_op_web_01_and_web_02_bl
+    check_op_web_01_and_web_02_lb
     ;;
   5)
     tranfare_to_web_02
-    check_op_web_01_and_web_02_bl
+    check_op_web_01_and_web_02_lb
     ;;
   6)
     tranfare_to_bl_01
-    check_op_web_01_and_web_02_bl
+    check_op_web_01_and_web_02_lb
     ;;
   7)
     exit_func
