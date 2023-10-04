@@ -21,7 +21,7 @@ cprint() {
 cprint "$GREEN" "[+] Good Morning sir what server you would like to connect: "
 
 # check the if the op is done well
-check_op_web_01_and_web_02_bl ()
+check_op_web_01_and_web_02_lb_01 ()
 {
   if [ $? -eq 0 ]; then
     cprint "$GREEN" "[+]Have a Nice Day\n"
@@ -30,56 +30,56 @@ check_op_web_01_and_web_02_bl ()
   fi
 }
 
-# function to connect to web-01 and web-02 and load balancer
+# function to connect to web-01 and web-02 and lb_01
 connect_to_web_01 ()
 {
     cprint "$GREEN" "[+]Connecting to web-01..."
-    ssh ubuntu@54.90.63.243 # !change this 
+    ssh web_01 # !change this 
 }
 
 connect_to_web_02 ()
 {
     cprint "$GREEN" "[+]Connecting to web-02..."
-    ssh ubuntu@54.90.4.180
+    ssh web_02
 }
 
-connect_to_bl () {
+connect_to_lb_01 () {
     cprint "$GREEN" "[+]Connecting to bl-01..."
-    ssh ubuntu@52.91.135.223 
+    ssh lb_01
 }
 
 
-# function to transfer the files to web-01 and web-02 and load balancer
-tranfare_to_web_01 ()
+# function to transfer the files to web-01 and web-02 and lb_01
+transfer_to_web_01 ()
 {
     cprint "$GREEN" "[+]Transferring files to web-01..."
     cprint "${MAGENTA}""[?] Enter the names of the files to transfer (space-separated): "
     read -rea files
 
     for file in "${files[@]}"; do
-        scp -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no "$file" ubuntu@54.90.63.243:~/ # !change this
+        scp -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no "$file" web_01:~/ # !change this
     done
 }
 
-tranfare_to_web_02 ()
+transfer_to_web_02 ()
 {
     cprint "$GREEN" "[+]Transferring files to web-02..."
     cprint "${MAGENTA}""[?] Enter the names of the files to transfer (space-separated): "
     read -rea files
 
     for file in "${files[@]}"; do
-        scp -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no "$file" ubuntu@54.90.4.180:~/ # !change this
+        scp -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no "$file" web_02:~/ # !change this
     done
 }
 
-tranfare_to_bl_01 ()
+transfer_to_lb_01 ()
 {
-    cprint "$GREEN" "[+]Transferring files to web-02..."
+    cprint "$GREEN" "[+]Transferring files to lb-01..."
     cprint "${MAGENTA}""[?] Enter the names of the files to transfer (space-separated): "
     read -rea files
 
     for file in "${files[@]}"; do
-        scp -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no "$file" ubuntu@52.91.135.223:~/ # !change this
+        scp -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no "$file" lb_01:~/ # !change this
     done
 }
 
@@ -98,10 +98,10 @@ print_msg()
     cprint "$BLUE" "[?]Choose the operation to perform: \n"
     cprint "$YELLOW" "========== connect to web-01 -> 1 ===============\n"
     cprint "$YELLOW" "========== connect to web-02 -> 2 ==========\n"
-    cprint "$YELLOW" "========== connect to load balancer -> 3 ============\n"
+    cprint "$YELLOW" "========== connect to lb_01 -> 3 ============\n"
     cprint "$YELLOW" "========== transfer files to web-01 -> 4 ============\n"
     cprint "$YELLOW" "========== transfer files to web-02 -> 5 ============\n"
-    cprint "$YELLOW" "========== transfer files to load balancer -> 6 ============\n"
+    cprint "$YELLOW" "========== transfer files to lb_01 -> 6 ============\n"
     cprint "$YELLOW" "==========Exit -> 7 ======================\n"
     cprint "$GREEN" "[?]Enter the number: "
 }
@@ -121,27 +121,27 @@ echo
 case $input in
   1)
     connect_to_web_01
-    check_op_web_01_and_web_02_bl
+    check_op_web_01_and_web_02_lb_01
     ;;
   2)
     connect_to_web_02
-    check_op_web_01_and_web_02_bl
+    check_op_web_01_and_web_02_lb_01
     ;;
   3)
-    connect_to_bl
-    check_op_web_01_and_web_02_bl
+    connect_to_lb_01
+    check_op_web_01_and_web_02_lb_01
     ;;
   4)
-    tranfare_to_web_01
-    check_op_web_01_and_web_02_bl
+    transfer_to_web_01
+    check_op_web_01_and_web_02_lb_01
     ;;
   5)
-    tranfare_to_web_02
-    check_op_web_01_and_web_02_bl
+    transfer_to_web_02
+    check_op_web_01_and_web_02_lb_01
     ;;
   6)
-    tranfare_to_bl_01
-    check_op_web_01_and_web_02_bl
+    transfer_to_lb_01
+    check_op_web_01_and_web_02_lb_01
     ;;
   7)
     exit_func
