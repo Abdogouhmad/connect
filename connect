@@ -1,0 +1,154 @@
+#!/usr/bin/env bash
+
+# coloring
+RED="\033[1;31m"
+GREEN="\033[1;32m"
+YELLOW="\033[1;33m"
+MAGENTA="\033[1;35m"
+CYAN="\033[1;36m"
+BLUE="\033[1;34m"
+NC="\033[0m"
+
+# printing function
+cprint() {
+  local color=$1
+  local text=$2
+  local NC='\033[0m'
+  echo -e "${color}${text}${NC}"
+}
+
+
+cprint "$GREEN" "[+] Good Morning sir what server you would like to connect: "
+
+# check the if the op is done well
+check_op_web_01_and_web_02_bl ()
+{
+  if [ $? -eq 0 ]; then
+    cprint "$GREEN" "[+]Have a Nice Day\n"
+  else
+    cprint "$RED" "[+]Something went wrong check your connection or try again\n"
+  fi
+}
+
+# function to connect to web-01 and web-02 and load balancer
+connect_to_web_01 ()
+{
+    cprint "$GREEN" "[+]Connecting to web-01..."
+    ssh ubuntu@54.90.63.243 # !change this 
+}
+
+connect_to_web_02 ()
+{
+    cprint "$GREEN" "[+]Connecting to web-02..."
+    ssh ubuntu@54.90.4.180
+}
+
+connect_to_bl () {
+    cprint "$GREEN" "[+]Connecting to bl-01..."
+    ssh ubuntu@52.91.135.223 
+}
+
+
+# function to transfer the files to web-01 and web-02 and load balancer
+tranfare_to_web_01 ()
+{
+    cprint "$GREEN" "[+]Transferring files to web-01..."
+    cprint "${MAGENTA}""[?] Enter the names of the files to transfer (space-separated): "
+    read -rea files
+
+    for file in "${files[@]}"; do
+        scp -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no "$file" ubuntu@54.90.63.243:~/ # !change this
+    done
+}
+
+tranfare_to_web_02 ()
+{
+    cprint "$GREEN" "[+]Transferring files to web-02..."
+    cprint "${MAGENTA}""[?] Enter the names of the files to transfer (space-separated): "
+    read -rea files
+
+    for file in "${files[@]}"; do
+        scp -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no "$file" ubuntu@54.90.4.180:~/ # !change this
+    done
+}
+
+tranfare_to_bl_01 ()
+{
+    cprint "$GREEN" "[+]Transferring files to web-02..."
+    cprint "${MAGENTA}""[?] Enter the names of the files to transfer (space-separated): "
+    read -rea files
+
+    for file in "${files[@]}"; do
+        scp -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no "$file" ubuntu@52.91.135.223:~/ # !change this
+    done
+}
+
+exit_func ()
+{
+    cprint "$RED" "[+]Exiting the script..."
+    cprint "$CYAN" "[+]Have a Nice Day cleaning your terminal in 2s..."
+    sleep 2
+    clear
+    exit 0
+}
+print_msg()
+{
+
+    cprint "$MAGENTA" "---> This is a script tends to connect and transfer the data files to server <---\n"
+    cprint "$BLUE" "[?]Choose the operation to perform: \n"
+    cprint "$YELLOW" "========== connect to web-01 -> 1 ===============\n"
+    cprint "$YELLOW" "========== connect to web-02 -> 2 ==========\n"
+    cprint "$YELLOW" "========== connect to load balancer -> 3 ============\n"
+    cprint "$YELLOW" "========== transfer files to web-01 -> 4 ============\n"
+    cprint "$YELLOW" "========== transfer files to web-02 -> 5 ============\n"
+    cprint "$YELLOW" "========== transfer files to load balancer -> 6 ============\n"
+    cprint "$YELLOW" "==========Exit -> 7 ======================\n"
+    cprint "$GREEN" "[?]Enter the number: "
+}
+
+
+
+
+
+
+loop=true
+
+while $loop ; do
+print_msg
+read  -rn 1 input
+echo
+
+case $input in
+  1)
+    connect_to_web_01
+    check_op_web_01_and_web_02_bl
+    ;;
+  2)
+    connect_to_web_02
+    check_op_web_01_and_web_02_bl
+    ;;
+  3)
+    connect_to_bl
+    check_op_web_01_and_web_02_bl
+    ;;
+  4)
+    tranfare_to_web_01
+    check_op_web_01_and_web_02_bl
+    ;;
+  5)
+    tranfare_to_web_02
+    check_op_web_01_and_web_02_bl
+    ;;
+  6)
+    tranfare_to_bl_01
+    check_op_web_01_and_web_02_bl
+    ;;
+  7)
+    exit_func
+    ;;
+  *)
+    cprint "$RED" "[-]Wrong input\n"
+    exit 2
+    ;;
+esac
+done
