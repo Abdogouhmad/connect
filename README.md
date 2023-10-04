@@ -88,3 +88,9 @@ Collaborations and contributions from the open-source community are highly welco
     - Documentation: If you make changes to the script or README, please update the documentation to reflect those changes.
 
 Your contributions will be greatly appreciated and will help make this script even more useful to others.
+
+
+## The current Contributors:
+<a href="https://github.com/div-styl/connect/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=div-styl/connect" />
+</a>
