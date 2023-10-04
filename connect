@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 
 # Server addresses (change these to your actual addresses)
-server1="5.565.453.432"
-server2="35.231.53.432"
-load_balancer="34.56.789.012"
+server1="your server goes here"
+server2="your ip server goes here"
+load_balancer="your load blancer ip goes here"
 
 # coloring
 RED="\033[1;31m"
@@ -26,6 +26,7 @@ cprint() {
 cprint "$GREEN" "[+] Good Day, What server you would like to connect to?: "
 
 # check the if the op is done well
+
 check_op_web_01_and_web_02_lb ()
 {
   if [ $? -eq 0 ]; then
@@ -35,16 +36,18 @@ check_op_web_01_and_web_02_lb ()
   fi
 }
 
-# function to connect to web-01 and web-02 and load balancer
+# function to connect to web-01 and web-02 and lb_01
 connect_to_web_01 ()
 {
     cprint "$GREEN" "[+]Connecting to web-01..."
+
     ssh ubuntu@$server1
 }
 
 connect_to_web_02 ()
 {
     cprint "$GREEN" "[+]Connecting to web-02..."
+
     ssh ubuntu@$server2
 }
 
@@ -54,8 +57,8 @@ connect_to_lb () {
 }
 
 
-# function to transfer the files to web-01 and web-02 and load balancer
-tranfare_to_web_01 ()
+# function to transfer the files to web-01 and web-02 and lb-01
+transfer_to_web_01 ()
 {
     cprint "$GREEN" "[+]Transferring files to web-01..."
     cprint "${MAGENTA}""[?] Enter the names of the files to transfer (space-separated): "
@@ -66,7 +69,7 @@ tranfare_to_web_01 ()
     done
 }
 
-tranfare_to_web_02 ()
+transfer_to_web_02 ()
 {
     cprint "$GREEN" "[+]Transferring files to web-02..."
     cprint "${MAGENTA}""[?] Enter the names of the files to transfer (space-separated): "
@@ -79,7 +82,7 @@ tranfare_to_web_02 ()
 
 tranfare_to_lb_01 ()
 {
-    cprint "$GREEN" "[+]Transferring files to web-02..."
+    cprint "$GREEN" "[+]Transferring files to lb-01..."
     cprint "${MAGENTA}""[?] Enter the names of the files to transfer (space-separated): "
     read -rea files
 
@@ -103,10 +106,10 @@ print_msg()
     cprint "$BLUE" "[?]Choose the operation to perform: \n"
     cprint "$YELLOW" "========== connect to web-01 -> 1 ===============\n"
     cprint "$YELLOW" "========== connect to web-02 -> 2 ==========\n"
-    cprint "$YELLOW" "========== connect to load balancer -> 3 ============\n"
+    cprint "$YELLOW" "========== connect to lb-01 -> 3 ============\n"
     cprint "$YELLOW" "========== transfer files to web-01 -> 4 ============\n"
     cprint "$YELLOW" "========== transfer files to web-02 -> 5 ============\n"
-    cprint "$YELLOW" "========== transfer files to load balancer -> 6 ============\n"
+    cprint "$YELLOW" "========== transfer files to lb-01 -> 6 ============\n"
     cprint "$YELLOW" "==========Exit -> 7 ======================\n"
     cprint "$GREEN" "[?]Enter the number: "
 }
@@ -143,6 +146,7 @@ case $input in
   6)
     tranfare_to_bl_01
     check_op_web_01_and_web_02_lb
+
     ;;
   7)
     exit_func
